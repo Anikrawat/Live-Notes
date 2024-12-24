@@ -28,7 +28,7 @@ const EditModal:React.FC<editModalProps> = ({noteId,setShareModal}) => {
     const {toast} = useToast();
     const [copying,setCopying] = useState(false);
     const baseURL = `${window.location.protocol}//${window.location.host}`;
-    const profileURL = `${baseURL}/notes/${noteId}adsfasdfasdfasfsfasfasfdadf`;
+    const profileURL = `${baseURL}/notes/${noteId}`;
 
 
     const copyingUrl =(e:React.MouseEvent<HTMLButtonElement>) => {
