@@ -1,6 +1,6 @@
 'use client'
 
-import {FC, useCallback, useEffect, useState} from 'react'
+import {FC, useCallback, useEffect} from 'react'
 import {Button} from "@/components/ui/button";
 import { Editor } from '@tiptap/react';
 import { Bold, Italic, Underline,Strikethrough,List,ListOrdered,Code,Undo,Redo } from "lucide-react"
@@ -13,11 +13,9 @@ interface ToolBarProps {
 }
 
 const ToolBar:FC<ToolBarProps> = ({editor,noteId}) => {
-    if (!editor) {
-        return null
-    }
-
+    
     const fetchEditorState = useCallback(async () => {
+        if (!editor) return
         try {
             const response = await axios.get(`/api/get-editor-state/${noteId}`)
             const editorState = response.data.document[0].notepadState
@@ -28,6 +26,7 @@ const ToolBar:FC<ToolBarProps> = ({editor,noteId}) => {
     },[])
 
     useEffect(() => {
+        if (!editor) return
         fetchEditorState()
         pusherClient.subscribe(noteId)
         pusherClient.bind("saving-editor-state",(editorState:string) => {
@@ -39,7 +38,10 @@ const ToolBar:FC<ToolBarProps> = ({editor,noteId}) => {
             pusherClient.unsubscribe(noteId)
         }
     }, []);
-
+    
+    if (!editor) {
+        return null
+    }
 
     return (
         <div className="w-[70vw] flex justify-center mt-4">
