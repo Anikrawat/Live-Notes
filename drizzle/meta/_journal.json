@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1735021497495,
+      "tag": "0000_overjoyed_winter_soldier",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1735039343187,
+      "tag": "0001_married_gravity",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1735039426124,
+      "tag": "0002_clammy_scarlet_spider",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1735040120702,
+      "tag": "0003_faithful_jack_power",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1735040652338,
+      "tag": "0004_icy_goblin_queen",
+      "breakpoints": true
+    }
+  ]
+}

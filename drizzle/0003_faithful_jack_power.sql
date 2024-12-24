@@ -1,0 +1,1 @@
+ALTER TABLE "documents" ALTER COLUMN "notepadState" SET DEFAULT '{"type":"doc","content":[{"type":"paragraph"}]}';
