@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
 import {useToast} from '@/components/hooks/use-toast'
 import Link from 'next/link'
+import { ClerkAPIError } from '@clerk/types'
 
 export default function SignInForm() {
   const { isLoaded, signIn, setActive } = useSignIn()
@@ -29,7 +30,6 @@ export default function SignInForm() {
     })
   }
 
-  // Handle the submission of the sign-in form
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -38,7 +38,6 @@ export default function SignInForm() {
       return
     }
 
-    // Start the sign-in process using the email and password provided
     try {
       const signInAttempt = await signIn.create({
         identifier: formData.email,
@@ -59,15 +58,16 @@ export default function SignInForm() {
           description: "Error logging in",
           variant: "destructive"
         })
-        console.error(JSON.stringify(signInAttempt, null, 2))
+        setIsSubmitting(false)
       }
-    } catch (err) {
+    } catch (err:unknown) {
+      const error = err as ClerkAPIError
       toast({
         title: "Failure",
-        description: "Error logging in",
+        description: error.message,
         variant: "destructive"
       })
-      console.error(JSON.stringify(err, null, 2))
+      setIsSubmitting(false)
     }
   }
 

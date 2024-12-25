@@ -11,7 +11,7 @@ import Link from 'next/link'
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp'
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp'
 import {useToast} from "@/components/hooks/use-toast";
-
+import { ClerkAPIError } from '@clerk/types'
 
 export default function Page() {
   const { isLoaded, signUp, setActive } = useSignUp()
@@ -59,18 +59,14 @@ export default function Page() {
       })
       setVerifying(true)
       setIsSubmitting(false)
-    } catch (err) {
+    } catch (err: unknown) {
+      const error = err as ClerkAPIError
       toast({
         title: 'Failure',
-        description: 'Error sending email',
+        description: error.message,
         variant: 'destructive',
       })
-      toast({
-        title: 'Failure',
-        description: 'Error sending email',
-        variant: 'destructive',
-      })
-      console.error(JSON.stringify(err, null, 2))
+      setIsSubmitting(false)
     }
   }
 
@@ -99,16 +95,16 @@ export default function Page() {
           description: 'Error verifying email',
           variant: 'destructive',
         })
-        console.error(JSON.stringify(signUpAttempt, null, 2))
       }
-      setIsSubmitting(true)
+      setIsSubmitting(false)
     } catch (err) {
+      const error = err as ClerkAPIError
       toast({
         title: 'Failure',
-        description: 'Error verifying email',
+        description: error.message,
         variant: 'destructive',
       })
-      console.error('Error:', JSON.stringify(err, null, 2))
+      setIsSubmitting(false)
     }
   }
 
