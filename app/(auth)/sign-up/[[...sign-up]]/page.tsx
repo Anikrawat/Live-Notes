@@ -2,7 +2,7 @@
 
 import React,{ useState } from 'react'
 import { useSignUp } from '@clerk/nextjs'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -15,7 +15,10 @@ import { ClerkAPIError } from '@clerk/types'
 
 export default function Page() {
   const { isLoaded, signUp, setActive } = useSignUp()
-
+  const router = useRouter()
+  const {toast} = useToast()
+  const searchParams = useSearchParams()
+  const callBackUrl = searchParams.get('callbackUrl') || ""
 
   const [formData, setFormData] = useState({
     username: '',
@@ -25,8 +28,6 @@ export default function Page() {
   const [verifying, setVerifying] = useState(false)
   const [code, setCode] = useState('')
   const [isSubmitting,setIsSubmitting] = useState(false)
-  const router = useRouter()
-  const {toast} = useToast()
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name,value} = e.target
@@ -88,7 +89,11 @@ export default function Page() {
           title: 'Success',
           description: 'User Verified',
         })
-        router.push('/dashboard')
+        if (callBackUrl.length > 0) {
+          router.push(callBackUrl)
+        } else {
+          router.push('/dashboard')
+        }
       } else {
         toast({
           title: 'Failure',
@@ -96,6 +101,7 @@ export default function Page() {
           variant: 'destructive',
         })
       }
+
       setIsSubmitting(false)
     } catch (err) {
       const error = err as ClerkAPIError
@@ -172,7 +178,7 @@ export default function Page() {
         <div className="text-center mt-4 text-white">
               <p>
                 Already a member?{' '}
-                <Link href={'/sign-in'} className="text-blue-600 hover:text-blue-800">Sign In</Link>
+                <Link href={`/sign-in?callbackUrl=${encodeURIComponent(callBackUrl)}`} className="text-blue-600 hover:text-blue-800">Sign In</Link>
               </p>
         </div>
       </form>

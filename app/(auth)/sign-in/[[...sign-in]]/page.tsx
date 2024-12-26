@@ -2,7 +2,7 @@
 
 import React,{ useState } from 'react'
 import { useSignIn } from '@clerk/nextjs'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Label } from '@radix-ui/react-label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -12,14 +12,17 @@ import Link from 'next/link'
 import { ClerkAPIError } from '@clerk/types'
 
 export default function SignInForm() {
+  const router = useRouter()
+  const {toast} = useToast()
+  const searchParams = useSearchParams()
+  const callBackUrl = searchParams.get('callbackUrl') || ""
+
   const { isLoaded, signIn, setActive } = useSignIn()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   })
   const [isSubmitting,setIsSubmitting] = useState(false)
-  const router = useRouter()
-  const {toast} = useToast()
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +54,11 @@ export default function SignInForm() {
           title: "Success",
           description: "Successfully logged in",
         })
-        router.push('/dashboard')
+        if (callBackUrl.length > 0) {
+          router.push(callBackUrl)
+        } else {
+          router.push('/dashboard')
+        }
       } else {
         toast({
           title: "Failure",
@@ -100,7 +107,7 @@ export default function SignInForm() {
         <div className="text-center mt-4 text-white">
               <p>
                 New to Cloud Notes{' '}
-                <Link href={'/sign-up'} className="text-blue-600 hover:text-blue-800">Sign Up</Link>
+                <Link href={`/sign-up/callbackUrl=${encodeURIComponent(callBackUrl)}`} className="text-blue-600 hover:text-blue-800">Sign Up</Link>
               </p>
         </div>
       </form>

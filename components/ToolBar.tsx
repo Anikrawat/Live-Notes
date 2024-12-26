@@ -4,8 +4,8 @@ import {FC, useCallback, useEffect} from 'react'
 import {Button} from "@/components/ui/button";
 import { Editor } from '@tiptap/react';
 import { Bold, Italic, Underline,Strikethrough,List,ListOrdered,Code,Undo,Redo } from "lucide-react"
-import axios from "axios";
 import {pusherClient} from "@/lib/pusher";
+import axios from 'axios';
 
 interface ToolBarProps {
     editor:Editor|null;
@@ -20,7 +20,7 @@ const ToolBar:FC<ToolBarProps> = ({editor,noteId}) => {
             const response = await axios.get(`/api/get-editor-state/${noteId}`)
             const editorState = response.data.document[0].notepadState
             editor.commands.setContent(JSON.parse(editorState))
-        } catch (error:any){
+        } catch (error:unknown) {
             console.log(error)
         }
     },[])

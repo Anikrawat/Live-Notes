@@ -14,7 +14,7 @@ export default clerkMiddleware(async (auth, req) => {
       await auth.protect(); // Ensure the user is authenticated
     } catch  {
       // Redirect unauthenticated users to the signin page
-      const redirectUrl = new URL('/sign-in', req.url);
+      const redirectUrl = new URL('/sign-up', req.url);
       redirectUrl.searchParams.set('callbackUrl', url.pathname); // Add the original URL
       return NextResponse.redirect(redirectUrl);
     }
